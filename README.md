@@ -8,7 +8,15 @@ Julia can be downloaded at https://julialang.org/. To install necessery dependen
 This project was written in Julia for VSCode (https://www.julia-vscode.org/). Other popular editors include an Atom extension Juno (https://junolab.org/) and Jupyter notebooks (https://jupyter.org/).
 
 ## Luminescence recordings
-Luminescence recordings are stored in `data/biolumdata.xlsx`. The file contains 8 sheets. Each sheet contains traces obtained from one cell culture plate. The first column on each sheet is called `Time` and contain time in hours from the beginning of the recording. The second column is called `Light` and decodes whether the light was turned on (1) or off (0) at the given time. The remaining columns contain luminescence recordings in counts per second (CPS).
+Luminescence recordings are stored in `data/biolumdata.xlsx`. The file contains 8 sheets. Each sheet contains traces obtained from one cell culture plate. The first column on each sheet is called `Time` and contains time in hours from the beginning of the recording. The second column is called `Light` and decodes whether the light was turned on (1) or off (0) at the given time. The remaining columns contain luminescence recordings in counts per second (CPS). The plate names correspond to the publication followingly
+- `Plate U1`: fitting data.
+- `Plate U2`: validation data.
+- `Plate U3`: 15:15 LD cycle.
+- `Plate U4`: 10:10 LD cycle.
+- `Plate D1 A`: LD cycle (set A).
+- `Plate D2 A`: Constant darkness (set A).
+- `Plate D1 B`: LD cycle (set B).
+- `Plate D2 B`: Constant darkness (set B).
 
 ## Figures
 All files strating with `figure_` contain scripts to generate figures from the paper. The generated figures are automatically stored in folder `figures` as SVG files.
