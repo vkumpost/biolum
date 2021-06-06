@@ -3,7 +3,7 @@
 This repository contains all code and data used in our publication.
 
 ## Installation 
-Julia can be downloaded at https://julialang.org/. To install necessery dependencies, start Julia, navigate yourself into the project folder by running `cd("my/path/to/biolum")`, and then either instantiate a package enviroment by running `] activate .` and `] instantiate` or just run `include("install.jl")` which will run `install.jl` script that will install all needed packages in the global enviroment.
+Julia can be downloaded at https://julialang.org/. To install necessery dependencies, start Julia, navigate yourself into the project folder by running `cd("my/path/to/biolum")`, and then instantiate a package enviroment by running `] activate .` and `] instantiate`.
 
 This project was written in Julia for VSCode (https://www.julia-vscode.org/). Other popular editors include an Atom extension Juno (https://junolab.org/) and Jupyter notebooks (https://jupyter.org/).
 
