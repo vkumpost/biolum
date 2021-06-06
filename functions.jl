@@ -16,6 +16,7 @@ const BBO = BlackBoxOptim
 const PyCall = PyPlot.PyCall
 
 include("BCModel.jl")
+include("Peaks.jl")
 include("functions_model.jl")
 include("functions_A_optim.jl")
 include("functions_B_optim.jl")
@@ -25,7 +26,6 @@ include("functions_D_optim.jl")
 # Colorblind-friendly colors
 const CB_COLORS = ["#377eb8", "#ff7f00", "#4daf4a", "#f781bf", "#a65628",
     "#984ea3", "#999999", "#e41a1c", "#dede00"]
-
 
 """
 `detectevents(t, x)`
@@ -194,7 +194,6 @@ function savecsv(df::DataFrame, args...)
     return CSV.write(filename, df)
 end
 
-
 """
 `selectwells(df::DataFrame, name)`
 
@@ -241,7 +240,8 @@ Load a `DataFrame` from a csv file located in the `outputs` folder.
 """
 function loadcsv(args...)
     filename = joinpath(@__DIR__, "outputs", args...)
-    return DataFrame!(CSV.File(filename))
+    df = DataFrame(CSV.File(filename))
+    return df
 end
 
 
@@ -279,7 +279,6 @@ function translatelabel(label)
     end
     return new_label
 end
-
 
 # helper function for creating figures with complex layouts
 pyslice(i1, i2) = PyPlot.pycall(PyPlot.pybuiltin("slice"), PyPlot.PyObject, i1, i2)
@@ -347,7 +346,6 @@ function createevents(X)
     return events
 end
 
-
 """
 `createcallback(events, i)`
 
@@ -377,7 +375,6 @@ function createcallback(events, i)
 
 end
 
-
 """
 `argpeaks(x)`
 
@@ -398,40 +395,34 @@ function argpeaks(x)
 end
 
 
-"""
-`findpeaks(x, t; mindistance = 0.0)`
+# """
+# `findpeaks(x, t; mindistance = 0.0)`
 
-Return times and peaks for time series `x` and time vector `t` as `(locs, pks)`
-where `locs` are peak locations and `pks` are peak magnitudes. `mindistance`
-specifies the minimum peak separation.
-"""
-function findpeaks(x, t; mindistance = 0.0)
-    idx = argpeaks(x)
-    locs = t[idx]
-    pks = x[idx]
+# Return times and peaks for time series `x` and time vector `t` as `(locs, pks)`
+# where `locs` are peak locations and `pks` are peak magnitudes. `mindistance`
+# specifies the minimum peak separation.
+# """
+# function findpeaks(x, t; mindistance = 0.0)
+#     idx = argpeaks(x)
+#     locs = t[idx]
+#     pks = x[idx]
 
-    if mindistance > 0.0
-        for (i, (loc, pk)) in enumerate(zip(locs, pks))
-            idx = loc - mindistance .< locs .< loc + mindistance
-            if any(pk .< pks[idx])
-                pks[i] = NaN
-            end
-        end
-        idx = .!isnan.(pks)
-        locs = locs[idx]
-        pks = pks[idx]
-    end
+#     if mindistance > 0.0
+#         for (i, (loc, pk)) in enumerate(zip(locs, pks))
+#             idx = loc - mindistance .< locs .< loc + mindistance
+#             if any(pk .< pks[idx])
+#                 pks[i] = NaN
+#             end
+#         end
+#         idx = .!isnan.(pks)
+#         locs = locs[idx]
+#         pks = pks[idx]
+#     end
 
-    return (locs, pks)
-end
+#     return (locs, pks)
+# end
 
 
-"""
-`sustainedperiod(x, t; minamp = 0.01, minlocs = 3, minlocdiffr = 0.02, minpksr = 0.02)`
-
-Return estimated period of the oscillations based on the peak distances or `NaN`
-if the oscillations are not sustained.
-"""
 function sustainedperiod(x, t; minamp = 0.01, minlocs = 3, minlocdiffr = 0.02, minpksr = 0.02)
 
     # find peaks and calculate statistics
@@ -538,4 +529,41 @@ function rsquared(x, y)
     SStot = sum((x .- μ).^2)
     R = 1 - SSres/SStot
     return R
+end
+
+
+"""
+ptp(x)
+
+Compute peak to peak amplitude of array `x`.
+"""
+function ptp(x)
+    return maximum(x) - minimum(x)
+end
+
+
+"""
+cmean(x)
+
+Compute circular mean of array `x` that represents angles in radians.
+"""
+function cmean(x)
+    S = mean(sin.(x))
+    C = mean(cos.(x))
+    m = atan(S, C)
+    return m
+end
+
+
+"""
+cstd(x)
+
+Compute circular standard deviation of array `x` that represents angles in radians.
+"""
+function cstd(x)
+    S = mean(sin.(x))
+    C = mean(cos.(x))
+    R = sqrt(S^2 + C^2)
+    m = sqrt(-2*log(R))
+    return m
 end
