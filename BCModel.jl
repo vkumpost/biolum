@@ -1,14 +1,12 @@
-# This file contains functions for the manipulation and simulation of the model.
-
 """
 `BCModel`
 
-Composite type representing bioluminescence circadian model.
+Bioluminescence circadian model.
 
 **Fields**
 - `species`: Tuple of symbols holding the variable names.
 - `parameters`: Tuple of symbols holding the parameter names.
-- `outfun`: Output function of the form `x = outfun(sol)`.
+- `outfun`: Output function taking a form `x = outfun(sol)`.
 - `prob`: `ODEProblem` or `SDEProblem`.
 """
 struct BCModel
@@ -96,6 +94,11 @@ function simulatepopulation2(model::BCModel, alg, trajectories;
         model = remakemodel(model, u0=u0arr[1, :])
     end
     (tout, xout, sol) = solvemodel(model, alg; kwargs...)
+    if any((s.retcode != :Success for s in sol))
+        tout = fill(NaN, length(xout))
+        xout = fill(NaN, length(xout))
+        return (tout, xout)
+    end
 
     Threads.@threads for i = 2:trajectories
 
