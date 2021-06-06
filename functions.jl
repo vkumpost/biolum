@@ -395,38 +395,12 @@ function argpeaks(x)
 end
 
 
-# """
-# `findpeaks(x, t; mindistance = 0.0)`
-
-# Return times and peaks for time series `x` and time vector `t` as `(locs, pks)`
-# where `locs` are peak locations and `pks` are peak magnitudes. `mindistance`
-# specifies the minimum peak separation.
-# """
-# function findpeaks(x, t; mindistance = 0.0)
-#     idx = argpeaks(x)
-#     locs = t[idx]
-#     pks = x[idx]
-
-#     if mindistance > 0.0
-#         for (i, (loc, pk)) in enumerate(zip(locs, pks))
-#             idx = loc - mindistance .< locs .< loc + mindistance
-#             if any(pk .< pks[idx])
-#                 pks[i] = NaN
-#             end
-#         end
-#         idx = .!isnan.(pks)
-#         locs = locs[idx]
-#         pks = pks[idx]
-#     end
-
-#     return (locs, pks)
-# end
-
-
 function sustainedperiod(x, t; minamp = 0.01, minlocs = 3, minlocdiffr = 0.02, minpksr = 0.02)
 
     # find peaks and calculate statistics
-    (locs, pks) = findpeaks(x, t)
+    peaks = findpeaks(x, t)
+    locs = peaks.locs
+    pks = peaks.pks
     amp = maximum(x) - minimum(x)
     m, s = mean_and_std(diff(locs))
 

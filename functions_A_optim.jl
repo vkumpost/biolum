@@ -117,8 +117,10 @@ function A_create_cost_function!(params)
             return Inf
         end
     
-        (locs01, _) = findpeaks(xld, tld)
-        (locs02, _) = findpeaks(xld2, tld2)
+        peaks01 = findpeaks(xld, tld)
+        locs01 = peaks01.locs
+        peaks02= findpeaks(xld2, tld2)
+        locs02 = peaks02.locs
         if isempty(locs01) || isempty(locs02)
             return 1000.0
         end
