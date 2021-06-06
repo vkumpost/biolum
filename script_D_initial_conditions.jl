@@ -1,12 +1,12 @@
 include("functions.jl")
 
-MODEL_NAME = "model05"
-RUN_NAME = "run 3"
+MODEL_NAME = "model04"
+RUN_NAME = "run 2"
 
 alg = DRI1()
 input_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "C_parameters.csv")
 output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_initial_conditions.csv")
-
+trajectories = 30000
 
 ## load parameter values and model function ===================================
 df = loadcsv(input_filename)
@@ -22,7 +22,7 @@ model = remakemodel(model, tspan=(0.0, transientevents[end]))
 printparameters(model)
 
 # test simulation -------------------------------------------------------------
-t, x, _ = simulatepopulation(model, alg, 1000, saveat=0.1)
+t, x, _ = simulatepopulation(model, alg, 10, saveat=0.1)
 figure()
 subplot(211)
 plot(t, x)
@@ -35,8 +35,8 @@ end
 plotevents(transientevents)
 
 ## generate intial conditions =================================================
-icarr = Array{Float64}(undef, 1000, 3)  # store all initial conditions here
-for i = 1:1000
+icarr = Array{Float64}(undef, trajectories, 3)  # store all initial conditions here
+for i = 1:trajectories
     println(i)
     _, _, sol = solvemodel(model, alg; save_everystep=false)
     icarr[i, :] = sol.u[2]
