@@ -1,7 +1,7 @@
 include("functions.jl")
 
-MODEL_NAME = "model05"
-RUN_NAME = "run 1"
+MODEL_NAME = "model06"
+RUN_NAME = "run 2 x"
 
 ## Control ====================================================================
 params = Dict(
@@ -14,7 +14,7 @@ params = Dict(
     :trajectories => 1000,
     :bbo_SearchRange => (0.0, 100.0),
     :bbo_MaxSteps => 25_000,
-    :n_reval => 100,  # for firtness reevaluation
+    :n_reval => 100,  # for fitness reevaluation
     :osc_con => true,  # constraint on sustained period
     
     # input files

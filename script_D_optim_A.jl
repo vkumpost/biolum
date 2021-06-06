@@ -1,7 +1,7 @@
 include("functions.jl")
 
-MODEL_NAME = "model05"
-RUN_NAME = "run 1"
+MODEL_NAME = "model06"
+RUN_NAME = "run 2 x"
 
 ## Control ====================================================================
 params = Dict(
