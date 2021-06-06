@@ -95,6 +95,26 @@ end
 
 
 """
+`model04b!(du, u, p, t)`
+
+"""
+function model04b!(du, u, p, t)
+
+    # Species
+    M, P, R = u
+
+    # Parameters
+    A, K, d, I = p
+
+    # Equations
+    du[1] = dM = kfr(R, A, K) - d*M + I
+    du[2] = dP = M - d*P
+    du[3] = dR = P - d*R
+
+end
+
+
+"""
 `loadmodel(name)`
 
 Load a `BCModel` specified by `name`.
@@ -199,6 +219,32 @@ function loadmodel(name)
             [0.1, 0.1, 0.1],
             (0.0, 250.0),
             [25.0, 0.15, 0.0, 0.0]
+        )
+        return BCModel(species, parameters, outfun, prob)
+
+    elseif name == :model04bsde
+        species = (:M, :P, :R)
+        parameters = (:A, :K, :d, :I, :noise)
+        outfun = sol -> kfr.(sol[3, :], sol.prob.p[1], sol.prob.p[2])
+        prob = SDEProblem(
+            model04b!,
+            (du, u, p, t) -> du[:] .= p[end],
+            [0.1, 0.1, 0.1],
+            (0.0, 250.0),
+            [25.0, 0.0, 0.15, 0.0, 0.0];
+            # noise = WienerProcess(0.0, 0.0, 0.0)
+        )
+        return BCModel(species, parameters, outfun, prob)
+
+    elseif name == :model04b
+        species = (:M, :P, :R)
+        parameters = (:A, :K, :d, :I)
+        outfun = sol -> kfr.(sol[3, :], sol.prob.p[1], sol.prob.p[2])
+        prob = ODEProblem(
+            model04b!,
+            [0.1, 0.1, 0.1],
+            (0.0, 250.0),
+            [25.0, 0.0, 0.15, 0.0]
         )
         return BCModel(species, parameters, outfun, prob)
 
