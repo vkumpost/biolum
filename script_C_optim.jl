@@ -14,7 +14,7 @@ params = Dict(
     :SearchRange => (0.0, 100.0),  # parameter range
     :MaxSteps => 100_000,  # number of optimization steps
 
-    :n_reval => 100,  # for firtness reevaluation
+    :n_reval => 100,  # for fitness reevaluation
 
     :in_initial_population_filename => joinpath("$(MODEL_NAME) $(RUN_NAME)",
         "B_parameters.csv"),
