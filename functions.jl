@@ -24,8 +24,8 @@ include("functions_C_optim.jl")
 include("functions_D_optim.jl")
 
 # Colorblind-friendly colors
-const CB_COLORS = ["#377eb8", "#ff7f00", "#4daf4a", "#f781bf", "#a65628",
-    "#984ea3", "#999999", "#e41a1c", "#dede00"]
+const CB_COLORS = ["#ff7f00", "#e41a1c", "#377eb8", "#4daf4a", "#f781bf",
+    "#a65628", "#984ea3", "#999999", "#dede00"]
 
 """
 `detectevents(t, x)`
