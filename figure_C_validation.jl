@@ -2,9 +2,11 @@ include("functions.jl")
 
 MODEL_NAME = "model04"
 RUN_NAME = "run 2"
+TRAJECTORIES = 30000
 
 df = loadcsv("$(MODEL_NAME) $(RUN_NAME)", "C_parameters.csv")
 p = DataFrame(df[1, 1:end-1])  # the best set of parameters without fitness
+
 output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "C_validation.svg")
 alg = DRI1()  # sde solver
 
@@ -17,7 +19,7 @@ rc("axes", titlesize=big_font, labelsize=medium_font)
 rc("xtick", labelsize=small_font) 
 rc("ytick", labelsize=small_font)
 
-fig = figure(figsize=(8, 4), constrained_layout=true)
+fig = figure(figsize=(8, 4), constrained_layout=true)  # 7.5, 8.75
 gs = fig.add_gridspec(3, 2)
 ax1 = fig.add_subplot(get(gs, (0, pyslice(0, 2))))
 ax2 = fig.add_subplot(get(gs, (1, pyslice(0, 2))))
@@ -34,8 +36,8 @@ function initial_conditions(model, alg; pacing=12)
     events = createevents([(:DD, 24), (:LD, 10, pacing, pacing)])
     model = addcallback(model, events, :I)
     model = remakemodel(model, tspan=(0.0, events[end]), saveat=[])
-    initial_conditions = Array{Float64}(undef, 1000, 3)
-    for i = 1:1000
+    initial_conditions = Array{Float64}(undef, TRAJECTORIES, 3)
+    for i = 1:TRAJECTORIES
         _, _, sol = solvemodel(model, alg; save_everystep=false)
         initial_conditions[i, :] = sol.u[2]
     end
@@ -57,11 +59,11 @@ data = aggregatewells(data, mean)
 events = detectevents(data)
 model = addcallback(model, events, :I)
 model = remakemodel(model, tspan=(0.0, data.Time[end]), saveat=data.Time)
-tout, xout = simulatepopulation2(model, alg, 1000; u0arr=ic)
+tout, xout = simulatepopulation2(model, alg, TRAJECTORIES; u0arr=ic)
 
 Rs = Float64[]
 Ls = Float64[]
-println("Plate U1")
+println("Fitting data")
 for i = 1:16
     traces[:, i] = zscore(traces[:, i])
     R = cor(traces[:, i], zscore(xout))^2
@@ -79,7 +81,7 @@ plotevents(ax1, events)
 ax1.autoscale(enable=true, tight=true)
 ax1.set_xlabel("Time (hours)")
 ax1.set_ylabel("Lumin. (au)")
-ax1.set_title("Plate U1 (fitting data)")
+ax1.set_title("Fitting data")
 ax1.set_xticks(0:24:maximum(tout))
 ax1.legend([h_model[1], h_data[1]], ["Model", "Data"];
     fancybox=false, edgecolor=:black, framealpha=1.0)
@@ -98,7 +100,7 @@ events = detectevents(data)
 
 model = addcallback(model, events, :I)
 model = remakemodel(model, tspan=(0.0, data.Time[end]), saveat=data.Time)
-tout, xout, _ = simulatepopulation(model, alg, 1000; u0arr=ic)
+tout, xout, _ = simulatepopulation(model, alg, TRAJECTORIES; u0arr=ic)
 
 Rs = Float64[]
 println("Plate U2")
@@ -119,7 +121,7 @@ plotevents(ax2, events)
 ax2.autoscale(enable=true, tight=true)
 ax2.set_xlabel("Time (hours)")
 ax2.set_ylabel("Lumin. (au)")
-ax2.set_title("Plate U2 (validation data)")
+ax2.set_title("Validation data")
 ax2.set_xticks(0:24:maximum(tout))
 
 ## Plate U3 ===================================================================
@@ -138,7 +140,7 @@ events = detectevents(data)
 model = addcallback(model, events, :I)
 model = remakemodel(model, tspan=(0.0, data.Time[end]), saveat=data.Time)
 ic = initial_conditions(model, alg; pacing=15)
-tout, xout, _ = simulatepopulation(model, alg, 1000; u0arr=ic)
+tout, xout, _ = simulatepopulation(model, alg, TRAJECTORIES; u0arr=ic)
 
 Rs = Float64[]
 println("Plate U3")
@@ -159,7 +161,7 @@ plotevents(ax3, events)
 ax3.autoscale(enable=true, tight=true)
 ax3.set_xlabel("Time (hours)")
 ax3.set_ylabel("Lumin. (au)")
-ax3.set_title("Plate U3 (15:15 pacing)")
+ax3.set_title("15:15 LD cycle")
 ax3.set_xticks(0:24:maximum(tout))
 
 ## Plate U4 ===================================================================
@@ -178,7 +180,7 @@ events = detectevents(data)
 model = addcallback(model, events, :I)
 model = remakemodel(model, tspan=(0.0, data.Time[end]), saveat=data.Time)
 ic = initial_conditions(model, alg; pacing=10)
-tout, xout, _ = simulatepopulation(model, alg, 1000; u0arr=ic)
+tout, xout, _ = simulatepopulation(model, alg, TRAJECTORIES; u0arr=ic)
 
 Rs = Float64[]
 println("Plate U4")
@@ -199,7 +201,7 @@ plotevents(ax4, events)
 ax4.autoscale(enable=true, tight=true)
 ax4.set_xlabel("Time (hours)")
 ax4.set_ylabel("Lumin. (au)")
-ax4.set_title("Plate U4 (10:10 pacing)")
+ax4.set_title("10:10 LD cycle")
 ax4.set_xticks(0:24:maximum(tout))
 
 ## Save figure ================================================================
