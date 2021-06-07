@@ -1,7 +1,3 @@
-#=
-First, you must run `script_prc.jl` to estimate the PRC.
-=#
-
 include("functions.jl")
 
 small_font = 8
