@@ -75,7 +75,8 @@ function create_models!(params)
             model = loadmodel(model_name*"sde")
             model = setparameters(model, p)  
             model = addcallback(model, events, :I)
-            model = remakemodel(model, tspan=tspan, saveat=1.0)
+            model = remakemodel(model, tspan=tspan,
+                saveat=1.0)
             push!(models[i], model)
         end
     end
@@ -181,15 +182,15 @@ function plot_parameters!(params)
 
     x = 1:length(labels)  # the label locations
 
-    fig, ax = subplots(2; figsize = (2.5, 4))
+    fig, ax = subplots(1, 2; figsize = (4, 2))
 
 
     for (i, x) in enumerate(Larr)
-        ax[1].hlines(mean(x), i - 0.25 / 1.5, i + 0.25 / 1.5; color = :red,
+        ax[1].hlines(mean(x), i - 0.5 / 1.5, i + 0.5 / 1.5; color = :red,
         zorder = 1000)
     end
     ax[1].plot(
-        [[0.25 .* rand(n).+ x .- 0.25 ./ 2 for x in 1:length(Larr)]...;],
+        [[0.5 .* rand(n).+ x .- 0.5 ./ 2 for x in 1:length(Larr)]...;],
         [Larr...;]; color = :black, marker = ".", linewidth = 0.0,
         markeredgewidth = 0.0, markersize = 4.0
     )
@@ -202,14 +203,14 @@ function plot_parameters!(params)
     ax[1].set_xticks(x)
     ax[1].set_xticklabels(labels; rotation=20, ha="right")
     
-    ax[1].legend(["Data points", "Mean"]; fancybox=false, edgecolor=:black)
+    ax[1].legend(["Parameter sets", "Mean"]; fancybox=false, edgecolor=:black)
 
     for (i, x) in enumerate(noisearr)
-        ax[2].hlines(mean(x), i - 0.25 / 1.5, i + 0.25 / 1.5; color = :red,
+        ax[2].hlines(mean(x), i - 0.5 / 1.5, i + 0.5 / 1.5; color = :red,
         zorder = 1000)
     end
     ax[2].plot(
-        [[0.25 .* rand(n).+ x .- 0.25 ./ 2 for x in 1:length(noisearr)]...;],
+        [[0.5 .* rand(n).+ x .- 0.5 ./ 2 for x in 1:length(noisearr)]...;],
         [noisearr...;]; color = :black, marker = ".", linewidth = 0.0,
         markeredgewidth = 0.0, markersize = 4.0 #, alpha = 0.2
         )
@@ -224,7 +225,7 @@ function plot_parameters!(params)
     fig.tight_layout()
 
     println("DRAWN")
-    savefigure(fig, dir, "fig4b.svg")
+    savefigure(fig, "fig4_parameters.svg")
 
 end
 
@@ -255,7 +256,7 @@ function plot_simulations(params)
         axarr[i].autoscale(tight = true)
         axarr[i].set_xticks(minimum(ty):24:maximum(ty))
         axarr[i].set_xticklabels(round.(Int, (minimum(ty):24:maximum(ty)) .- minimum(ty)))
-        axarr[i].plot(ty, y_cells[:, 1:5]; color = colorarr[i], alpha = 0.5)
+        axarr[i].plot(ty, y_cells[:, 1:5]; color = colorarr[i], linewidth = 1)
 
         axarr[i].set_xlabel("Time (hours)")
         axarr[i].set_ylabel("Lumin. (au)")
