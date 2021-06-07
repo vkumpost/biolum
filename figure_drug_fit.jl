@@ -11,7 +11,7 @@ rc("ytick", labelsize=small_font)
 MODEL_NAME = "model06"
 RUN_NAME = "run 2 x"
 
-## Fig 3A =====================================================================
+## Fig 3A ===================================================================
 drug_fullname = ""
 drug_names = ["Control", "DBC 0.5",  "U0126 20"]
 drug_filenames = [
@@ -22,8 +22,9 @@ drug_filenames = [
 plate_set = "A"
 output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "fit_example_a.svg")
 colorarr = [:black, CB_COLORS[2], CB_COLORS[3]]
+figsize = (5, 3)
 
-## Fig 3B =====================================================================
+# ## Fig 3B ===================================================================
 # drug_fullname = ""
 # drug_names = ["Control", "EGF 30",  "Ro-318220 5"]
 # drug_filenames = [
@@ -34,8 +35,9 @@ colorarr = [:black, CB_COLORS[2], CB_COLORS[3]]
 # plate_set = "B"
 # output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "fit_example_b.svg")
 # colorarr = [:gray, CB_COLORS[4], CB_COLORS[6]]
+# figsize = (5, 3)
 
-## S3 Fig A ===================================================================
+# ## S3 Fig A ===================================================================
 # drug_fullname = "Forskolin"
 # drug_names = ["Control", "Forskolin 5",  "Forskolin 10", "Forskolin 15"]
 # drug_filenames = [
@@ -47,8 +49,9 @@ colorarr = [:black, CB_COLORS[2], CB_COLORS[3]]
 # plate_set = "A"
 # output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "drug_fit_for.svg")
 # colorarr = [:black, CB_COLORS[1], CB_COLORS[2], CB_COLORS[3]]
+# figsize = (4, 3)
 
-## S3 Fig B ===================================================================
+# ## S3 Fig B ===================================================================
 # drug_fullname = "DBC"
 # drug_names = ["Control", "DBC 0.5", "DBC 1", "DBC 3"]
 # drug_filenames = [
@@ -60,8 +63,9 @@ colorarr = [:black, CB_COLORS[2], CB_COLORS[3]]
 # plate_set = "A"
 # output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "drug_fit_dbc.svg")
 # colorarr = [:black, CB_COLORS[1], CB_COLORS[2], CB_COLORS[3]]
+# figsize = (4, 3)
 
-## S3 Fig C ===================================================================
+# ## S3 Fig C ===================================================================
 # drug_fullname = "U0126"
 # drug_names = ["Control", "U0126 10",  "U0126 20", "U0126 40"]
 # drug_filenames = [
@@ -73,8 +77,9 @@ colorarr = [:black, CB_COLORS[2], CB_COLORS[3]]
 # plate_set = "A"
 # output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "drug_fit_u0126.svg")
 # colorarr = [:black, CB_COLORS[1], CB_COLORS[2], CB_COLORS[3]]
+# figsize = (4, 3)
 
-## S3 Fig D ===================================================================
+# ## S3 Fig D ===================================================================
 # drug_fullname = "EGF"
 # drug_names = ["Control", "EGF 30",  "EGF 50", "EGF 80"]
 # drug_filenames = [
@@ -86,8 +91,9 @@ colorarr = [:black, CB_COLORS[2], CB_COLORS[3]]
 # plate_set = "B"
 # output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "drug_fit_egf.svg")
 # colorarr = [:black, CB_COLORS[1], CB_COLORS[2], CB_COLORS[3]]
+# figsize = (4, 3)
 
-## S3 Fig E ===================================================================
+# # S3 Fig E ===================================================================
 # drug_fullname = "PMA"
 # drug_names = ["Control", "PMA 0.5",  "PMA 1", "PMA 3"]
 # drug_filenames = [
@@ -99,8 +105,9 @@ colorarr = [:black, CB_COLORS[2], CB_COLORS[3]]
 # plate_set = "B"
 # output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "drug_fit_pma.svg")
 # colorarr = [:black, CB_COLORS[1], CB_COLORS[2], CB_COLORS[3]]
+# figsize = (4, 3)
 
-## S3 Fig F ===================================================================
+# ## S3 Fig F ===================================================================
 # drug_fullname = "Ro-318220"
 # drug_names = ["Control", "Ro-318220 2",  "Ro-318220 5", "Ro-318220 8"]
 # drug_filenames = [
@@ -112,13 +119,14 @@ colorarr = [:black, CB_COLORS[2], CB_COLORS[3]]
 # plate_set = "B"
 # output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "drug_fit_ro.svg")
 # colorarr = [:black, CB_COLORS[1], CB_COLORS[2], CB_COLORS[3]]
+# figsize = (4, 3)
 
 params = Dict(
     :model_name => MODEL_NAME,
     :showplots => false,
     :plate_set => plate_set,
     :sde_alg => DRI1(),  # SDE solver
-    :trajectories => 1000,
+    :trajectories => 30_000,
     :colorarr => colorarr,
     
     # input files
@@ -136,8 +144,8 @@ for (name, filename) in zip(drug_names, drug_filenames)
     push!(paramsarr, tmp)
 end
 
-# Create the figure
-fig = figure(figsize=(4, 3), constrained_layout=true)
+## Create the figure
+fig = figure(figsize=figsize, constrained_layout=true)
 gs = fig.add_gridspec(2, 2; width_ratios=[100, 1])
 ax1 = fig.add_subplot(get(gs, (0, pyslice(0, 2))))
 ax2 = fig.add_subplot(get(gs, (1, 0)))
@@ -190,10 +198,6 @@ for i = 1:length(paramsarr)
     push!(handles_data, h_data[1])
     push!(handles_model, h_model[1])
 
-    # R2D1 = round(cor(xsim01, xdataarr[1])^2; digits = 2)
-    # L2D1 = round(squarederror(xsim01, xdataarr[1]; fun=mean); digits = 2)
-    # R2D2 = round(cor(xsim02, xdataarr[2])^2; digits = 2)
-    # L2D2 = round(squarederror(xsim02, xdataarr[2]; fun=mean); digits = 2)
     R2D1 = round(rsquared(xsim01, xdataarr[1]); digits = 2)
     R2D2 = round(rsquared(xsim02, xdataarr[2]); digits = 2)
 
