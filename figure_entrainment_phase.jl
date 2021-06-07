@@ -45,7 +45,7 @@ output_filename = "fig4_T.svg"
 #     "[FOR] = 5 μM", CB_COLORS[1]),
 #     ("model06 run 2 x", ["T_forskolin_2.csv"], 
 #     "[FOR] = 10 μM", CB_COLORS[2]),
-#     ("model06 run 2 x", ["T_forskolin_2.csv"], 
+#     ("model06 run 2 x", ["T_forskolin_3.csv"], 
 #     "[FOR] = 15 μM", CB_COLORS[3]),
 # ]
 # output_filename = joinpath("model06 run 2 x", "T_forskolin.svg")

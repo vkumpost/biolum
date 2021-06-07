@@ -21,12 +21,15 @@ params = Dict(
     # :filename => joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_control_b.csv"),
     # :output_filename => joinpath("$(MODEL_NAME) $(RUN_NAME)", "T_control_b.csv")
 
-    # DBC
+    # forskolin
     # :filename => joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_forskolin_1.csv"),
     # :output_filename => joinpath("$(MODEL_NAME) $(RUN_NAME)", "T_forskolin_1.csv")
 
     # :filename => joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_forskolin_2.csv"),
     # :output_filename => joinpath("$(MODEL_NAME) $(RUN_NAME)", "T_forskolin_2.csv")
+
+    # :filename => joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_forskolin_3.csv"),
+    # :output_filename => joinpath("$(MODEL_NAME) $(RUN_NAME)", "T_forskolin_3.csv")
 
     # DBC
     # :filename => joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_dbc_1.csv"),
