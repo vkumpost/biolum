@@ -1,6 +1,6 @@
 # Biolum
 
-This repository contains all code and data used in our publication.
+This repository contains all code and data used in our publication [A stochastic oscillator model simulates the entrainment of vertebrate cellular clocks by light](https://www.nature.com/articles/s41598-021-93913-2).
 
 ## Installation 
 To install necessery dependencies, start [Julia](https://julialang.org/) in the project folder and then instantiate a package enviroment by running `] activate .` and `] instantiate`.
