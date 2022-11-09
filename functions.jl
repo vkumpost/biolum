@@ -11,6 +11,8 @@ using DataFrames
 using PyPlot
 using DifferentialEquations
 
+rc("font", family="arial")
+
 const MS = MultivariateStats
 const BBO = BlackBoxOptim
 const PyCall = PyPlot.PyCall
