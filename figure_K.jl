@@ -2,14 +2,6 @@ include("functions.jl")
 
 close(:all)
 
-small_font = 8
-medium_font = 9
-big_font = 10
-rc("font", family="arial", size=small_font)
-rc("axes", titlesize=big_font, labelsize=medium_font)
-rc("xtick", labelsize=small_font) 
-rc("ytick", labelsize=small_font)
-
 MODEL_NAME = "model04b"
 RUN_NAME = "run 2"
 

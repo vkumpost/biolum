@@ -1,13 +1,5 @@
 include("functions.jl")
 
-small_font = 8
-medium_font = 9
-big_font = 10
-rc("font", family="arial", size=small_font)
-rc("axes", titlesize=big_font, labelsize=medium_font)
-rc("xtick", labelsize=small_font) 
-rc("ytick", labelsize=small_font)
-
 data_raw = loaddata("Plate U1")
 data_sel = selectwells(data_raw, r"WT [A|B]")
 events = detectevents(data_sel)
@@ -26,18 +18,18 @@ fig, (ax1, ax2, ax3) = subplots(3; figsize = (7, 4.5))
 ax1.plot(t, X; color = :black)
 plotevents(ax1, events)
 ax1.autoscale(tight = true)
-ax1.set_ylabel("Lumin. (cps)")
-ax1.set_xlabel("Time (hours)")
-ax1.set_title("Raw bioluminescence data")
+ax1.set_ylabel("Lumin. (cps)", labelpad=0)
+ax1.set_xlabel("Time (hours)", labelpad=0)
+ax1.set_title("Raw bioluminescence data", pad=0, loc="left")
 ax1.set_xticks(0:48:t[end])
 
 X_norm = mapslices(zscore, X; dims = 1)
 ax2.plot(t, X_norm; color = :black)
 plotevents(ax2, events)
 ax2.autoscale(tight = true)
-ax2.set_ylabel("Lumin. (au)")
-ax2.set_xlabel("Time (hours)")
-ax2.set_title("Normalized well traces")
+ax2.set_ylabel("Lumin. (au)", labelpad=0)
+ax2.set_xlabel("Time (hours)", labelpad=0)
+ax2.set_title("Normalized well traces", pad=0, loc="left")
 ax2.set_xticks(0:48:t[end])
 
 n = size(X_norm, 1)
@@ -53,12 +45,13 @@ plotevents(ax3, events;  ylims=[-1000, 1000])
 ax3.autoscale(tight = true)
 ax3.set_ylim(minimum([d.μ - 3*d.σ for d in distributions]),
     maximum([d.μ + 3*d.σ for d in distributions]))
-ax3.set_ylabel("Lumin. (au)")
-ax3.set_xlabel("Time (hours)")
-ax3.set_title("Mean of wells")
-ax3.legend(["Mean", "3 * std"], fancybox=false, edgecolor=:black, framealpha=1)
+ax3.set_ylabel("Lumin. (au)", labelpad=0)
+ax3.set_xlabel("Time (hours)", labelpad=0)
+ax3.set_title("Mean of wells", pad=0, loc="left")
+ax3.legend(["Mean", "3*SD"], edgecolor=:black, framealpha=1, ncol=2)
 ax3.set_xticks(0:48:t[end])
 
-fig.tight_layout()  
+fig.tight_layout(pad=0.3)
 
+fig.show()
 savefigure(fig, "data_norm.svg")

@@ -1,13 +1,5 @@
 include("functions.jl")
 
-small_font = 8
-medium_font = 9
-big_font = 10
-rc("font", family="arial", size=small_font)
-rc("axes", titlesize=big_font, labelsize=medium_font)
-rc("xtick", labelsize=small_font) 
-rc("ytick", labelsize=small_font)
-
 filenames = [
     ("model06 run 2 x", ["T_control_a.csv"], 
     "Control", "black"),
@@ -98,21 +90,21 @@ end
 
 ## ==
 close(:all)
-fig, ax = subplots(figsize = (3.5, 2.5))
+fig, ax = subplots(figsize = (4, 3))
 markerarr = ["o", "v", "^", "s"]
 for i = 1:N
     PRC = PRC_arr[i]
     label = label_arr[i]
     X = PRC[:, :times]
     Y = PRC[:, :shift_mean]
-    ax.plot(X, Y; marker = markerarr[i], color = color_arr[i], markersize = 3, label = label)
+    ax.plot(X, Y; marker = markerarr[i], color = color_arr[i], label = label)
 end
 
-ax.set_xlabel("LD cycle period (hours)")
-ax.set_ylabel("Phase angle (hours)")
-ax.set_title("Phase of entrainment")
+ax.set_xlabel("LD cycle period (hours)", labelpad=0)
+ax.set_ylabel("Phase angle (hours)", labelpad=0)
+ax.set_title("Phase of entrainment", pad=0, loc="left")
 ax.legend(fancybox=true, edgecolor=:black, framealpha=1.0)
 ax.set_xticks(PRC_arr[1][:, :times])
-fig.tight_layout()
+fig.tight_layout(pad=0)
 
 savefigure(fig, output_filename)

@@ -1,13 +1,5 @@
 include("functions.jl")
 
-small_font = 8
-medium_font = 9
-big_font = 10
-rc("font", family="arial", size=small_font)
-rc("axes", titlesize=big_font, labelsize=medium_font)
-rc("xtick", labelsize=small_font) 
-rc("ytick", labelsize=small_font)
-
 druglists = [
     ["Control", "Forskolin 5", "Forskolin 10", "Forskolin 15"],
     ["Control", "DBC 0.5", "DBC 1", "DBC 3"],
@@ -50,9 +42,9 @@ for (druglist, platelist) = zip(druglists, platelists)
     drugname = split(druglist[2], " ")[1]
 
     # Create figure raw
-    for (normname, dataarr) in zip(["original", "normalized"], [datarawarr, datanormarr])
+    for (normname, dataarr) in zip(["original", "normalized", "naive"], [datarawarr, datanormarr, datarawarr])
 
-        fig = figure(figsize=(4, 3), constrained_layout=true)
+        fig = figure(figsize=(6.5, 3.2), constrained_layout=true)
         gs = fig.add_gridspec(2, 2; width_ratios=[80, 1])
         ax1 = fig.add_subplot(get(gs, (0, pyslice(0, 2))))
         ax2 = fig.add_subplot(get(gs, (1, 0)))
@@ -65,20 +57,25 @@ for (druglist, platelist) = zip(druglists, platelists)
             handles = []
             for j = 1:ndrug
                 X = wells2matrix(selectwells(dataarr[i], Regex(druglist[j])))
+                if normname == "naive"
+                    for i_column = 1:size(X, 2)
+                        X[:, i_column] = zscore(X[:, i_column])
+                    end
+                end
                 h = axarr[i].plot(dataarr[i].Time, X, color=colors[j])
                 push!(handles, h[1])
             end
             plotevents(axarr[i], detectevents(dataarr[i]))
             if normname == "original"
-                axarr[i].set_ylabel("Lumin. (cps)")
+                axarr[i].set_ylabel("Lumin. (cps)", labelpad=0)
             else
-                axarr[i].set_ylabel("Lumin. (au)")
+                axarr[i].set_ylabel("Lumin. (au)", labelpad=0)
             end
-            axarr[i].set_xlabel("Time (hours)")
+            axarr[i].set_xlabel("Time (hours)", labelpad=0)
             if i == 1
-                axarr[i].set_title("$drugname - LD cycle - $normname")
+                axarr[i].set_title("$drugname - jet lag - $normname", loc="left", pad=0)
             else
-                axarr[i].set_title("$drugname - constant darkness - $normname")
+                axarr[i].set_title("$drugname - constant darkness - $normname", loc="left", pad=0)
             end
             axarr[i].set_xticks(0:24:maximum(dataarr[i].Time))
             if i == 2

@@ -1,28 +1,19 @@
 include("functions.jl")
 
-small_font = 8
-medium_font = 9
-big_font = 10
-rc("font", family="arial", size=small_font)
-rc("axes", titlesize=big_font, labelsize=medium_font)
-rc("xtick", labelsize=small_font) 
-rc("ytick", labelsize=small_font)
-
 MODEL_NAME = "model06"
 RUN_NAME = "run 2 x"
 
 ## Fig 3A ===================================================================
-drug_fullname = ""
-drug_names = ["Control", "DBC 0.5",  "U0126 20"]
-drug_filenames = [
-    joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_control_a.csv"),
-    joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_dbc_1.csv"),
-    joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_u0126_2.csv"),
-]
-plate_set = "A"
-output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "fit_example_a.svg")
-colorarr = [:black, CB_COLORS[2], CB_COLORS[3]]
-figsize = (5, 3)
+# drug_fullname = ""
+# drug_names = ["Control", "DBC 0.5",  "U0126 20"]
+# drug_filenames = [
+#     joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_control_a.csv"),
+#     joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_dbc_1.csv"),
+#     joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_u0126_2.csv"),
+# ]
+# plate_set = "A"
+# output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "fit_example_a.svg")
+# colorarr = [:black, CB_COLORS[2], CB_COLORS[3]]
 
 # ## Fig 3B ===================================================================
 # drug_fullname = ""
@@ -35,21 +26,19 @@ figsize = (5, 3)
 # plate_set = "B"
 # output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "fit_example_b.svg")
 # colorarr = [:gray, CB_COLORS[4], CB_COLORS[6]]
-# figsize = (5, 3)
 
 # ## S3 Fig A ===================================================================
-# drug_fullname = "Forskolin"
-# drug_names = ["Control", "Forskolin 5",  "Forskolin 10", "Forskolin 15"]
-# drug_filenames = [
-#     joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_control_a.csv"),
-#     joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_forskolin_1.csv"),
-#     joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_forskolin_2.csv"),
-#     joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_forskolin_3.csv"),
-# ]
-# plate_set = "A"
-# output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "drug_fit_for.svg")
-# colorarr = [:black, CB_COLORS[1], CB_COLORS[2], CB_COLORS[3]]
-# figsize = (4, 3)
+drug_fullname = "Forskolin"
+drug_names = ["Control", "Forskolin 5",  "Forskolin 10", "Forskolin 15"]
+drug_filenames = [
+    joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_control_a.csv"),
+    joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_forskolin_1.csv"),
+    joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_forskolin_2.csv"),
+    joinpath("$(MODEL_NAME) $(RUN_NAME)", "D_forskolin_3.csv"),
+]
+plate_set = "A"
+output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "drug_fit_for.svg")
+colorarr = [:black, CB_COLORS[1], CB_COLORS[2], CB_COLORS[3]]
 
 # ## S3 Fig B ===================================================================
 # drug_fullname = "DBC"
@@ -63,7 +52,6 @@ figsize = (5, 3)
 # plate_set = "A"
 # output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "drug_fit_dbc.svg")
 # colorarr = [:black, CB_COLORS[1], CB_COLORS[2], CB_COLORS[3]]
-# figsize = (4, 3)
 
 # ## S3 Fig C ===================================================================
 # drug_fullname = "U0126"
@@ -77,7 +65,6 @@ figsize = (5, 3)
 # plate_set = "A"
 # output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "drug_fit_u0126.svg")
 # colorarr = [:black, CB_COLORS[1], CB_COLORS[2], CB_COLORS[3]]
-# figsize = (4, 3)
 
 # ## S3 Fig D ===================================================================
 # drug_fullname = "EGF"
@@ -91,7 +78,6 @@ figsize = (5, 3)
 # plate_set = "B"
 # output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "drug_fit_egf.svg")
 # colorarr = [:black, CB_COLORS[1], CB_COLORS[2], CB_COLORS[3]]
-# figsize = (4, 3)
 
 # # S3 Fig E ===================================================================
 # drug_fullname = "PMA"
@@ -105,7 +91,6 @@ figsize = (5, 3)
 # plate_set = "B"
 # output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "drug_fit_pma.svg")
 # colorarr = [:black, CB_COLORS[1], CB_COLORS[2], CB_COLORS[3]]
-# figsize = (4, 3)
 
 # ## S3 Fig F ===================================================================
 # drug_fullname = "Ro-318220"
@@ -119,7 +104,8 @@ figsize = (5, 3)
 # plate_set = "B"
 # output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "drug_fit_ro.svg")
 # colorarr = [:black, CB_COLORS[1], CB_COLORS[2], CB_COLORS[3]]
-# figsize = (4, 3)
+
+figsize = (6.5, 3.2)
 
 params = Dict(
     :model_name => MODEL_NAME,
@@ -207,16 +193,16 @@ end
 axarr[1].autoscale(tight=true)
 axarr[2].autoscale(tight=true)
 if isempty(drug_fullname)
-    axarr[1].set_title("LD cycle")
-    axarr[2].set_title("Constant darkness")
+    axarr[1].set_title("Jet lag", pad=0, loc="left")
+    axarr[2].set_title("Constant darkness", pad=0, loc="left")
 else
-    axarr[1].set_title(drug_fullname * " - LD cycle")
-    axarr[2].set_title(drug_fullname * " - constant darkness")
+    axarr[1].set_title(drug_fullname * " - jet lag", pad=0, loc="left")
+    axarr[2].set_title(drug_fullname * " - constant darkness", pad=0, loc="left")
 end
-axarr[1].set_xlabel("Time (hours)")
-axarr[2].set_xlabel("Time (hours)")
-axarr[1].set_ylabel("Lumin. (au)")
-axarr[2].set_ylabel("Lumin. (au)")
+axarr[1].set_xlabel("Time (hours)", labelpad=0)
+axarr[2].set_xlabel("Time (hours)", labelpad=0)
+axarr[1].set_ylabel("Lumin. (au)", labelpad=0)
+axarr[2].set_ylabel("Lumin. (au)", labelpad=0)
 
 
 handles = [handles_model[1], handles_data[1], handles_model...]
@@ -225,4 +211,5 @@ axarr[2].legend(handles, labels,
                     loc="upper left", bbox_to_anchor=(1, 1.0), fancybox=false,
                     edgecolor=:black)
  
+fig.show()
 savefigure(fig, output_filename)

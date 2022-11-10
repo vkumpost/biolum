@@ -11,15 +11,7 @@ output_filename = joinpath("$(MODEL_NAME) $(RUN_NAME)", "C_validation.svg")
 alg = DRI1()  # sde solver
 
 ## Prepare figure layout ======================================================
-small_font = 8
-medium_font = 9
-big_font = 10
-rc("font", family="arial", size=small_font)
-rc("axes", titlesize=big_font, labelsize=medium_font)
-rc("xtick", labelsize=small_font) 
-rc("ytick", labelsize=small_font)
-
-fig = figure(figsize=(8, 4), constrained_layout=true)  # 7.5, 8.75
+fig = figure(figsize=(7, 5), constrained_layout=true)  # 7.5, 8.75
 gs = fig.add_gridspec(3, 2)
 ax1 = fig.add_subplot(get(gs, (0, pyslice(0, 2))))
 ax2 = fig.add_subplot(get(gs, (1, pyslice(0, 2))))
@@ -79,9 +71,9 @@ h_data = ax1.plot(data.Time, traces, color=:gray)
 h_model = ax1.plot(tout, zscore(xout), color=:black)
 plotevents(ax1, events)
 ax1.autoscale(enable=true, tight=true)
-ax1.set_xlabel("Time (hours)")
-ax1.set_ylabel("Lumin. (au)")
-ax1.set_title("Fitting data")
+ax1.set_xlabel("Time (hours)", labelpad=0)
+ax1.set_ylabel("Lumin. (au)", labelpad=0)
+ax1.set_title("Fitting data", pad=0, loc="left")
 ax1.set_xticks(0:24:maximum(tout))
 ax1.legend([h_model[1], h_data[1]], ["Model", "Data"];
     fancybox=false, edgecolor=:black, framealpha=1.0)
@@ -119,9 +111,9 @@ ax2.plot(data.Time, traces, color=:gray)
 ax2.plot(tout, zscore(xout), color=:black)
 plotevents(ax2, events)
 ax2.autoscale(enable=true, tight=true)
-ax2.set_xlabel("Time (hours)")
-ax2.set_ylabel("Lumin. (au)")
-ax2.set_title("Validation data")
+ax2.set_xlabel("Time (hours)", labelpad=0)
+ax2.set_ylabel("Lumin. (au)", labelpad=0)
+ax2.set_title("Validation data", pad=0, loc="left")
 ax2.set_xticks(0:24:maximum(tout))
 
 ## Plate U3 ===================================================================
@@ -159,9 +151,9 @@ ax3.plot(data.Time, traces, color=:gray)
 ax3.plot(tout, zscore(xout), color=:black)
 plotevents(ax3, events)
 ax3.autoscale(enable=true, tight=true)
-ax3.set_xlabel("Time (hours)")
-ax3.set_ylabel("Lumin. (au)")
-ax3.set_title("15:15 LD cycle")
+ax3.set_xlabel("Time (hours)", labelpad=0)
+ax3.set_ylabel("Lumin. (au)", labelpad=0)
+ax3.set_title("15:15 LD cycle", pad=0, loc="left")
 ax3.set_xticks(0:24:maximum(tout))
 
 ## Plate U4 ===================================================================
@@ -199,9 +191,9 @@ ax4.plot(data.Time, traces, color=:gray)
 ax4.plot(tout, zscore(xout), color=:black)
 plotevents(ax4, events)
 ax4.autoscale(enable=true, tight=true)
-ax4.set_xlabel("Time (hours)")
-ax4.set_ylabel("Lumin. (au)")
-ax4.set_title("10:10 LD cycle")
+ax4.set_xlabel("Time (hours)", labelpad=0)
+ax4.set_ylabel("Lumin. (au)", labelpad=0)
+ax4.set_title("10:10 LD cycle", pad=0, loc="left")
 ax4.set_xticks(0:24:maximum(tout))
 
 ## Save figure ================================================================

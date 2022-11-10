@@ -44,15 +44,8 @@ for i_filename = 1:n_filenames
 end
 
 close(:all)
-small_font = 8
-medium_font = 9
-big_font = 10
-rc("font", family="arial", size=small_font)
-rc("axes", titlesize=big_font, labelsize=medium_font)
-rc("xtick", labelsize=small_font) 
-rc("ytick", labelsize=small_font)
 
-fig, axs = subplots(2, 3; figsize=(8, 3))
+fig, axs = subplots(2, 3; figsize=(9, 3.25))
 
 axs = [axs...;]
 
@@ -76,12 +69,13 @@ for i = 1:6
         axs[i].vlines(vlines_arr[j], yticks_arr[1], yticks_arr[2], color=:gray, linestyle="--", lw = 1)
     end
     
-    axs[i].set_title(parameter_names[i])
+    axs[i].set_title(parameter_names[i], pad=0)
     axs[i].set_xticks([1.5, 4, 6.5, 8.5, 11, 13.5, 15.5])
     axs[i].set_xticklabels(["Control", "FOR", "DBC", "U0126", "EGF", "PMA", "RO"], rotation=25, ha="right")
     axs[i].set_yticks(yticks_arr)
 
 end
 
-fig.tight_layout()
+fig.tight_layout(pad=0.3)
+fig.show()
 savefigure(fig, dir, "parameter_values.svg")

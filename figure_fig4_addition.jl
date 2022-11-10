@@ -2,14 +2,6 @@ include("functions.jl")
 
 close(:all)
 
-small_font = 8
-medium_font = 9
-big_font = 10
-rc("font", family="arial", size=small_font)
-rc("axes", titlesize=big_font, labelsize=medium_font)
-rc("xtick", labelsize=small_font) 
-rc("ytick", labelsize=small_font)
-
 params = Dict(
     :model_name => "model06",
     :dir => "model06 run 2 x",
@@ -126,7 +118,7 @@ colors = params[:colors]
 events = params[:events][end-4:end, :]
 labels = params[:titles]
 
-fig, axarr = subplots(4, figsize=(8, 4.5))
+fig, axarr = subplots(4, figsize=(7, 5.5))
 
 # first subfigure
 max_value = -Inf
@@ -156,13 +148,13 @@ for i = 1:3
     if i == 3
         plotevents(axarr[1], events .- offset; ylims = [min_value-1, max_value+1])
         # axarr[1].set_title("Simulated time series")
-        axarr[1].set_ylabel("Lumin. (au)")
-        axarr[1].set_xlabel("Time (hours)")
+        axarr[1].set_ylabel("Lumin. (au)", labelpad=0)
+        axarr[1].set_xlabel("Time (hours)", labelpad=0)
         axarr[1].set_xlim(tout[1], tout[end])
         axarr[1].set_xticks(0:24:tout[end])
         axarr[1].set_ylim(min_value-0.001, max_value+0.001)
-        axarr[1].legend(labels, ncol = 3, edgecolor=:black, framealpha=1.0, loc="upper right")
-        axarr[1].set_title("Population-level simulated luminescence", loc = "left", y = 0.0, x = 0.0)
+        axarr[1].legend(labels, ncol=2, edgecolor=:black, framealpha=1.0, loc="upper right")
+        axarr[1].set_title("Population-level simulated luminescence", loc = "left", pad=0)
     end
 
 end
@@ -189,7 +181,7 @@ for i = 1:3
     #     min_value = minimum(xout)
     # end
 
-    for j = 1:10
+    for j = 1:5
         axarr[i+1].plot(tout, X[idx, j], color = colors[i], alpha = 1.0)
     end
     # axarr[1].plot(tout, xout, color = colors[i])
@@ -197,18 +189,18 @@ for i = 1:3
   
     plotevents(axarr[i+1], events .- offset; ylims = [min_value-1, max_value+1])
     # axarr[i+1].set_title("Simulated time series")
-    axarr[i+1].set_ylabel("Lumin. (au)")
-    axarr[i+1].set_xlabel("Time (hours)")
+    axarr[i+1].set_ylabel("Lumin. (au)", labelpad=0)
+    axarr[i+1].set_xlabel("Time (hours)", labelpad=0)
     axarr[i+1].set_xlim(tout[1], tout[end])
     axarr[i+1].set_xticks(0:24:tout[end])
     axarr[i+1].set_ylim(min_value-0.001, max_value+0.001)
-    axarr[i+1].set_title("Individual simulated cells: $(labels[i])", loc = "left", y = 0.0, x = 0.0)
+    axarr[i+1].set_title("Example of 5 simulated cells for $(labels[i])", loc = "left", pad=0)
 
 
 
 end
 
-fig.tight_layout()
+fig.tight_layout(pad=0.3)
 savefigure(fig, "fig4_simulations.svg")
 
 ## ==
@@ -255,7 +247,7 @@ for i = 1:3
 
 end
 
-fig, ax = subplots(1, 2, figsize=(8, 2))
+fig, ax = subplots(1, 2, figsize=(7, 2))
 for i = 1:3
     color = colors[i]
     locs_LD = locs_LD_arr[i] .- minimum(locs_LD_arr[i])
@@ -265,26 +257,27 @@ for i = 1:3
     else
         alpha = 1.0
     end
-    h1 = ax[1].hist(locs_LD, bins = minimum(locs_LD):(maximum(locs_LD)+1), color = color, alpha = alpha, density=true, histtype=:step, linewidth=2)
+    h1 = ax[1].hist(locs_LD, bins = minimum(locs_LD):(maximum(locs_LD)+1), color = color, alpha = alpha, density=true, histtype=:step, linewidth=2, label=labels[i])
     ax[2].hist(locs_DD, bins = minimum(locs_DD):(maximum(locs_DD)+1), color = color, alpha = alpha, density=true, histtype=:step, linewidth=2)
 
     n = length(h1[1])
-    ax[1].hlines(1/n, 0, 24, color = :gray, linewidth = 2, zorder = 1000)
+    ax[1].hlines(1/n, 0, 24, color = :gray, linewidth = 2, zorder = 1000, label="Uniform distribution")
     ax[2].hlines(1/n, 0, 24, color = :gray, linewidth = 2, zorder = 1000)
 
     ax[1].set_xlim(0, 24)
     ax[2].set_xlim(0, 24)
-    ax[1].set_title("LD cycle")
-    ax[2].set_title("Constant darkness")
-    ax[1].set_xlabel("Time (hours)")
-    ax[2].set_xlabel("Time (hours)")
-    ax[1].set_ylabel("Peak pdf (-)")
-    ax[2].set_ylabel("Peak pdf (-)")
+    ax[1].set_title("LD cycle", pad=0, loc="left")
+    ax[2].set_title("Constant darkness", pad=0, loc="left")
+    ax[1].set_xlabel("Time (hours)", labelpad=0)
+    ax[2].set_xlabel("Time (hours)", labelpad=0)
+    ax[1].set_ylabel("Peak pdf (-)", labelpad=0)
+    ax[2].set_ylabel("Peak pdf (-)", labelpad=0)
     ax[1].set_xticks(0:4:24)
     ax[2].set_xticks(0:4:24)
     ax[1].set_ylim(0, 0.08)
     ax[2].set_ylim(0, 0.08)
 end
-ax[2].legend([labels...; "Uniform distribution"], edgecolor=:black, framealpha=1.0, loc = "lower left", ncol=2)
-fig.tight_layout()
+# ax[2].legend([labels...; "Uniform distribution"], edgecolor=:black, framealpha=1.0, loc = "lower left", ncol=1)
+ax[1].legend(edgecolor=:black, framealpha=1.0, loc = "lower left", ncol=1)
+fig.tight_layout(pad=0.3)
 savefigure(fig, "fig4_pdf.svg")

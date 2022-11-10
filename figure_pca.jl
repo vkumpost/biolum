@@ -1,13 +1,5 @@
 include("functions.jl")
 
-small_font = 8
-medium_font = 9
-big_font = 10
-rc("font", family="arial", size=small_font)
-rc("axes", titlesize=big_font, labelsize=medium_font)
-rc("xtick", labelsize=small_font) 
-rc("ytick", labelsize=small_font)
-
 MODEL_NAME = "model06"
 RUN_NAME = "run 2 x"
 
@@ -160,7 +152,6 @@ function pca_fit!(params)
 end
 pca_fit!(params)
 
-
 ## pca_plot ===================================================================
 function pca_plot(params)
 
@@ -169,7 +160,7 @@ function pca_plot(params)
     pca = params[:pca]
     out_folder = params[:out_folder]
 
-    fig, ax = subplots(figsize=(8, 8))
+    fig, ax = subplots(figsize=(7, 7))
     cluster_counter = 0
     i1 = 1  # principal component on the x-axis
     i2 = 2  # principal component on the y-axis
@@ -211,7 +202,7 @@ function pca_plot(params)
     ax.set_xlabel("PC$i1 ($aaa % explained variance)")
     ax.set_ylabel("PC$i2 ($bbb % explained variance)")
     ax.set_title("PCA plot")
-
+    fig.show()
     savefigure(fig, joinpath(out_folder, "pca_clusters.svg"))
     
 end
@@ -227,7 +218,7 @@ function pca_paths(params)
     pca = params[:pca]
     out_folder = params[:out_folder]
 
-    fig, ax = subplots(figsize=(4, 4))
+    fig, ax = subplots(figsize=(5, 5))
     cluster_counter = 0
     i1 = 1  # principal component on the x-axis
     i2 = 2  # principal component on the y-axis
@@ -279,11 +270,12 @@ function pca_paths(params)
 
     aaa = round(Int64, pca.prinvars[i1]/pca.tvar*100)
     bbb = round(Int64, pca.prinvars[i2]/pca.tvar*100)
-    ax.set_xlabel("PC$i1 ($aaa % explained variance)")
-    ax.set_ylabel("PC$i2 ($bbb % explained variance)")
-    ax.set_title("PCA plot")
+    ax.set_xlabel("PC$i1 ($aaa % explained variance)", labelpad=0)
+    ax.set_ylabel("PC$i2 ($bbb % explained variance)", labelpad=0)
+    ax.set_title("PCA plot", pad=0, loc="left")
     fig.tight_layout()
 
+    fig.show()
     savefigure(fig, joinpath(out_folder, "pca_paths.svg"))
 
 end
@@ -317,7 +309,11 @@ function pca_projections(params)
 
     aaa = round(Int64, pca.prinvars[i1]/pca.tvar*100)
     bbb = round(Int64, pca.prinvars[i2]/pca.tvar*100)
-    ax.set_title("Parameter projections")
+    ax.set_title("Model parameter projections", pad=0, loc="left")
+
+    ax.set_xlim(-0.75, 0.75)
+    ax.set_ylim(-0.85, 0.85)
+
     fig.tight_layout()
 
     savefigure(fig, joinpath(out_folder, "pca_projections.svg"))
